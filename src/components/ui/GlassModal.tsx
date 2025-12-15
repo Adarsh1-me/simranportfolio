@@ -25,13 +25,13 @@ const GlassModal = ({ isOpen, onClose, children, title }: GlassModalProps) => {
           
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 50 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-2xl md:w-full md:max-h-[80vh] overflow-y-auto z-50"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-3xl max-h-[85vh] overflow-y-auto z-50"
           >
-            <div className="glass rounded-3xl p-8 shadow-3d relative">
+            <div className="bg-card border border-border rounded-3xl p-8 shadow-3d relative">
               {/* Close button */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
