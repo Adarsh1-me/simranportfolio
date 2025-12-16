@@ -311,9 +311,7 @@ const Home = () => {
                     </div>
                     
                     <p className="text-muted-foreground text-sm flex-1">{cert.issuer}</p>
-                    <span className="inline-block mt-4 px-3 py-1 rounded-full bg-teal-light/20 text-teal-light text-sm font-semibold">
-                      {cert.year}
-                    </span>
+                    
                   </div>
                 </Card3D>
               </motion.div>)}
