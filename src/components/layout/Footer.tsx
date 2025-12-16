@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { Mail, Phone, Linkedin, Download, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const CV_LINK = "https://drive.google.com/file/d/1nznwL_hpF8gwimhPLY8aGol5U3gmh3c7/view?usp=drivesdk";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -27,7 +29,9 @@ const Footer = () => {
               Healthcare Management Portfolio - Compassionate, Professional, Future-Focused in Healthcare Leadership.
             </p>
             <motion.a
-              href="#"
+              href={CV_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-teal-light text-navy rounded-xl font-semibold hover:shadow-glow transition-all duration-300"

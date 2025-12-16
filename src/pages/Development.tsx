@@ -1,11 +1,21 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Card3D from "@/components/ui/Card3D";
 import SectionTitle from "@/components/ui/SectionTitle";
+import ImageLightbox from "@/components/ui/ImageLightbox";
+import timeline2022 from "@/assets/timeline-2022.jpeg";
+import timeline2023 from "@/assets/timeline-2023.jpeg";
+import timeline2024 from "@/assets/timeline-2024.jpeg";
+import simranHero from "@/assets/simran-hero.jpeg";
 import { Download, Target, Briefcase, Users, Lightbulb, Network, Heart, Check } from "lucide-react";
 
+const CV_LINK = "https://drive.google.com/file/d/1nznwL_hpF8gwimhPLY8aGol5U3gmh3c7/view?usp=drivesdk";
+
 const Development = () => {
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+
   const personalGoals = [
     { icon: Target, title: "Strengthen leadership capability", desc: "Developing stronger leadership skills in healthcare environments through hands-on experience and training" },
     { icon: Briefcase, title: "Improve coordination skills", desc: "Enhancing organisational and project coordination abilities for healthcare settings" },
@@ -13,16 +23,16 @@ const Development = () => {
   ];
 
   const professionalGoals = [
-    { icon: Heart, title: "Secure a Healthcare Role", desc: "Obtain a position as Care Coordinator or Retirement Village Support Staff" },
+    { icon: Heart, title: "Secure a Healthcare Role", desc: "Obtain a position as Care Coordinator or Retirement Village Support Staff in New Zealand" },
     { icon: Network, title: "Build Professional Network", desc: "Establish strong connections within New Zealand healthcare sector" },
     { icon: Users, title: "Community Contribution", desc: "Contribute meaningfully to community health and elderly wellbeing initiatives" },
   ];
 
   const milestones = [
-    { year: "2022", title: "Started Teaching Career", desc: "Began as Primary Science Teacher, incorporating health education" },
-    { year: "2023", title: "Lab Coordinator Role", desc: "Promoted to Biology Teacher & Lab Coordinator with safety responsibilities" },
-    { year: "2024", title: "Health Education Lead", desc: "Led health awareness campaigns as Science Educator" },
-    { year: "2025", title: "Healthcare Management Studies", desc: "Pursuing Healthcare Management at ICL Graduate Business School, Auckland" },
+    { year: "2022", title: "Started Teaching Career", desc: "Began as Primary Science Teacher at New Era World School, India, incorporating health education", image: timeline2022 },
+    { year: "2023", title: "Lab Coordinator Role", desc: "Promoted to Biology Teacher & Lab Coordinator at Dronacharya Senior Secondary School, India with safety responsibilities", image: timeline2023 },
+    { year: "2024", title: "Health Education Lead", desc: "Led health awareness campaigns as Science Educator at New Green Field School, Delhi, India", image: timeline2024 },
+    { year: "2025", title: "Healthcare Management Studies", desc: "Pursuing Healthcare Management at ICL Graduate Business School, Auckland, New Zealand", image: simranHero },
   ];
 
   return (
@@ -47,7 +57,7 @@ const Development = () => {
               Professional <span className="gradient-text">Development</span>
             </h1>
             <p className="text-lg text-muted-foreground">
-              My journey of continuous learning and growth in healthcare management
+              My journey of continuous learning and growth from India to New Zealand
             </p>
           </motion.div>
         </div>
@@ -61,7 +71,7 @@ const Development = () => {
             subtitle="Key milestones in my professional development"
           />
 
-          <div className="max-w-4xl mx-auto relative">
+          <div className="max-w-5xl mx-auto relative">
             {/* Timeline line */}
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-light via-primary to-cyan-glow transform md:-translate-x-1/2" />
 
@@ -89,6 +99,17 @@ const Development = () => {
                 <div className={`ml-20 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-16 md:text-right" : "md:pl-16"}`}>
                   <Card3D>
                     <div className="p-6">
+                      {/* Timeline Image */}
+                      <div 
+                        className="mb-4 rounded-xl overflow-hidden cursor-pointer group h-40"
+                        onClick={() => setLightboxImage({ src: milestone.image, alt: milestone.title })}
+                      >
+                        <img 
+                          src={milestone.image} 
+                          alt={milestone.title}
+                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
                       <span className="inline-block px-3 py-1 rounded-full bg-teal-light/20 text-teal-light text-sm font-semibold mb-3">
                         {milestone.year}
                       </span>
@@ -201,7 +222,9 @@ const Development = () => {
                   experience, and professional development.
                 </p>
                 <motion.a
-                  href="#"
+                  href={CV_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-teal-light to-primary text-primary-foreground rounded-2xl font-semibold text-lg shadow-card hover:shadow-glow transition-all duration-300"
@@ -216,6 +239,14 @@ const Development = () => {
       </section>
 
       <Footer />
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        isOpen={!!lightboxImage}
+        onClose={() => setLightboxImage(null)}
+        src={lightboxImage?.src || ""}
+        alt={lightboxImage?.alt || ""}
+      />
     </div>
   );
 };

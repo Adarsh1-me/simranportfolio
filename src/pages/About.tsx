@@ -4,30 +4,26 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Card3D from "@/components/ui/Card3D";
 import SectionTitle from "@/components/ui/SectionTitle";
-import GlassModal from "@/components/ui/GlassModal";
+import ImageLightbox from "@/components/ui/ImageLightbox";
 import simranLibrary from "@/assets/simran-library.jpeg";
-import { Target, Lightbulb, TrendingUp, Users, Heart, Shield, Check } from "lucide-react";
+import { Target, Lightbulb, TrendingUp, Users, Heart, Shield, ChevronDown } from "lucide-react";
 
 const About = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: "", content: "" });
-
-  const openModal = (title: string, content: string) => {
-    setModalContent({ title, content });
-    setModalOpen(true);
-  };
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [expandedStrength, setExpandedStrength] = useState<number | null>(null);
+  const [expandedDev, setExpandedDev] = useState<number | null>(null);
 
   const strengths = [
-    { icon: Users, title: "Leadership through coordination", desc: "Effectively organizing teams and resources to achieve healthcare goals" },
-    { icon: Heart, title: "Strong interpersonal communication", desc: "Building trust and rapport with patients, families, and colleagues" },
-    { icon: Target, title: "Patient-centred mindset", desc: "Always prioritizing the well-being and dignity of those in care" },
-    { icon: Shield, title: "Organised and compliance-aware", desc: "Maintaining standards and regulatory requirements in healthcare settings" },
+    { icon: Users, title: "Leadership through coordination", desc: "Effectively organizing teams and resources to achieve healthcare goals", detail: "Throughout my career in India, I have demonstrated the ability to lead by coordinating teams, delegating tasks effectively, and ensuring collaborative success in health education initiatives." },
+    { icon: Heart, title: "Strong interpersonal communication", desc: "Building trust and rapport with patients, families, and colleagues", detail: "My experience working with students, parents, and colleagues in educational settings has honed my ability to communicate with empathy and build lasting professional relationships." },
+    { icon: Target, title: "Patient-centred mindset", desc: "Always prioritizing the well-being and dignity of those in care", detail: "I believe in putting people first, whether they are students, patients, or elderly residents. This mindset guides every professional decision I make." },
+    { icon: Shield, title: "Organised and compliance-aware", desc: "Maintaining standards and regulatory requirements in healthcare settings", detail: "As a lab coordinator, I developed strong skills in maintaining compliance, following protocols, and ensuring safety standards are consistently met." },
   ];
 
   const development = [
-    { icon: TrendingUp, title: "Advanced healthcare project management", desc: "Developing skills in coordinating complex healthcare initiatives" },
-    { icon: Lightbulb, title: "Digital healthcare systems", desc: "Learning modern healthcare technology and data management" },
-    { icon: Target, title: "Strategic leadership exposure", desc: "Gaining experience in healthcare administration and decision-making" },
+    { icon: TrendingUp, title: "Advanced healthcare project management", desc: "Developing skills in coordinating complex healthcare initiatives", detail: "I am actively building expertise in project management methodologies specific to healthcare environments, preparing for roles that require oversight of complex care programs." },
+    { icon: Lightbulb, title: "Digital healthcare systems", desc: "Learning modern healthcare technology and data management", detail: "As healthcare increasingly relies on technology, I am dedicating time to understanding electronic health records, telehealth platforms, and digital care coordination tools used in New Zealand." },
+    { icon: Target, title: "Strategic leadership exposure", desc: "Gaining experience in healthcare administration and decision-making", detail: "Through my studies at ICL Graduate Business School, Auckland and practical experiences, I am developing strategic thinking skills essential for healthcare leadership roles." },
   ];
 
   return (
@@ -62,7 +58,10 @@ const About = () => {
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="relative"
                 >
-                  <div className="relative rounded-3xl overflow-hidden shadow-3d border border-border">
+                  <div 
+                    className="relative rounded-3xl overflow-hidden shadow-3d border border-border cursor-pointer"
+                    onClick={() => setLightboxOpen(true)}
+                  >
                     <img
                       src={simranLibrary}
                       alt="Simran in professional setting"
@@ -102,8 +101,8 @@ const About = () => {
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                 I am a compassionate and motivated healthcare management student at 
-                ICL Graduate Business School, Auckland. With a strong academic foundation 
-                in Medical Biotechnology and hands-on experience in health education, 
+                ICL Graduate Business School, Auckland, New Zealand. With a strong academic foundation 
+                in Medical Biotechnology from India and hands-on experience in health education, 
                 team coordination, and awareness campaigns, I am driven to support 
                 quality care delivery and community well-being.
               </p>
@@ -116,7 +115,7 @@ const About = () => {
                   </h3>
                   <p className="text-muted-foreground">
                     My professional goal is to work as a Care Coordinator Support Worker or 
-                    Retirement Village Support Staff, where I can combine healthcare knowledge, 
+                    Retirement Village Support Staff in New Zealand, where I can combine healthcare knowledge, 
                     management principles, and interpersonal skills to enhance residents' 
                     quality of life.
                   </p>
@@ -147,26 +146,41 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.03, y: -5 }}
-                  onClick={() => openModal(item.title, item.desc)}
-                  className="cursor-pointer p-6 rounded-3xl bg-primary-foreground/5 border border-primary-foreground/10 hover:border-teal-light/30 hover:shadow-glow transition-all duration-300 group h-full"
-                >
+                <div className="p-6 rounded-3xl bg-primary-foreground/5 border border-primary-foreground/10 hover:border-teal-light/30 transition-all duration-300 h-full">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-2xl bg-teal-light/20 group-hover:bg-teal-light/30 transition-colors">
+                    <div className="p-3 rounded-2xl bg-teal-light/20">
                       <item.icon className="w-6 h-6 text-teal-light" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-primary-foreground mb-2 group-hover:text-teal-light transition-colors">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-primary-foreground mb-2">
                         {item.title}
                       </h3>
                       <p className="text-primary-foreground/60 text-sm">{item.desc}</p>
+                      
+                      {/* Expandable detail */}
+                      <motion.div
+                        initial={false}
+                        animate={{ height: expandedStrength === index ? "auto" : 0, opacity: expandedStrength === index ? 1 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="mt-4 pt-4 border-t border-primary-foreground/10 text-primary-foreground/70 text-sm">
+                          {item.detail}
+                        </p>
+                      </motion.div>
+                      
+                      <button
+                        onClick={() => setExpandedStrength(expandedStrength === index ? null : index)}
+                        className="mt-3 flex items-center gap-1 text-teal-light text-xs font-medium hover:underline"
+                      >
+                        {expandedStrength === index ? "Show less" : "Read more"}
+                        <motion.div animate={{ rotate: expandedStrength === index ? 180 : 0 }}>
+                          <ChevronDown className="w-3 h-3" />
+                        </motion.div>
+                      </button>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center text-teal-light text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Check className="w-4 h-4 mr-1" /> Click for details
-                  </div>
-                </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -192,13 +206,35 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card3D onClick={() => openModal(item.title, item.desc)}>
-                  <div className="p-6 text-center cursor-pointer">
+                <Card3D className="h-full">
+                  <div className="p-6 text-center h-full flex flex-col">
                     <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-teal-light/20 to-cyan-glow/20 flex items-center justify-center">
                       <item.icon className="w-8 h-8 text-teal-light" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                    <p className="text-muted-foreground text-sm">{item.desc}</p>
+                    <p className="text-muted-foreground text-sm flex-1">{item.desc}</p>
+                    
+                    {/* Expandable detail */}
+                    <motion.div
+                      initial={false}
+                      animate={{ height: expandedDev === index ? "auto" : 0, opacity: expandedDev === index ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-4 pt-4 border-t border-border text-muted-foreground text-sm text-left">
+                        {item.detail}
+                      </p>
+                    </motion.div>
+                    
+                    <button
+                      onClick={() => setExpandedDev(expandedDev === index ? null : index)}
+                      className="mt-4 flex items-center gap-1 text-teal-light text-xs font-medium hover:underline mx-auto"
+                    >
+                      {expandedDev === index ? "Show less" : "Read more"}
+                      <motion.div animate={{ rotate: expandedDev === index ? 180 : 0 }}>
+                        <ChevronDown className="w-3 h-3" />
+                      </motion.div>
+                    </button>
                   </div>
                 </Card3D>
               </motion.div>
@@ -207,20 +243,15 @@ const About = () => {
         </div>
       </section>
 
-      <GlassModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalContent.title}
-      >
-        <p className="text-muted-foreground leading-relaxed">{modalContent.content}</p>
-        <p className="mt-4 text-muted-foreground leading-relaxed">
-          This competency is essential for my career in healthcare management and contributes to 
-          my effectiveness as a future Care Coordinator or Retirement Village Support Staff member.
-          I continue to develop and refine this skill through practical experience and continuous learning.
-        </p>
-      </GlassModal>
-
       <Footer />
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        src={simranLibrary}
+        alt="Simran in professional setting"
+      />
     </div>
   );
 };
